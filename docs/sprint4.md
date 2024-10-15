@@ -21,7 +21,7 @@
 - [x] .then() 메서드를 이용하여 비동기 처리를 해주세요.
 
 - [x] .catch() 를 이용하여 오류 처리를 해주세요.
-
+      dd
 - [x] 'https://sprint-mission-api.vercel.app/products' API를 이용하여 아래 함수들을 구현해 주세요.
 
 - [x] getProductList() : GET 메서드를 사용해 주세요.
