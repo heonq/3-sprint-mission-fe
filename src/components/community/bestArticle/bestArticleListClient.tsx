@@ -17,8 +17,8 @@ export default function BestArticleListClient({
   if (isLoading) return;
   Array.from(
     { length: MEDIA_QUERY.bestArticlePageSize[screenWidth!] },
-    (el) => el,
-  ).map((_) => <BestArticleSkeleton />);
+    () => 0,
+  ).map((el, index) => <BestArticleSkeleton key={el + index} />);
 
   return (
     <>

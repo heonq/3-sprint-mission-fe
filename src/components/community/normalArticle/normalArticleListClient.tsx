@@ -15,8 +15,8 @@ export default function NormalArticleListClient({
   });
 
   if (isLoading)
-    return Array.from({ length: 10 }, (_, index) => index).map((_) => (
-      <NormalArticleCardSkeleton />
+    return Array.from({ length: 10 }, () => 0).map((el, index) => (
+      <NormalArticleCardSkeleton key={el + index} />
     ));
 
   return (

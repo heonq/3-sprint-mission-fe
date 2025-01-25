@@ -34,8 +34,11 @@ export default function BestProductListClient({
   });
 
   if (isLoading)
-    return Array.from({ length: sliceValue }, (el) => el).map((_) => (
-      <ProductSkeleton size='big' />
+    return Array.from({ length: sliceValue }, () => 0).map((el, index) => (
+      <ProductSkeleton
+        size='big'
+        key={el + index}
+      />
     ));
 
   return (
