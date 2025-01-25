@@ -7,11 +7,9 @@ import NormalArticleCardSkeleton from './normalArticleSkeleton';
 
 export default function NormalArticleListClient({
   searchParams,
-  initialData,
 }: NormalArticleListProps) {
   const { data, isLoading } = useNormalArticleListQuery({
     searchParams,
-    initialData,
   });
 
   if (isLoading)
@@ -19,18 +17,22 @@ export default function NormalArticleListClient({
       <NormalArticleCardSkeleton key={el + index} />
     ));
 
+  console.log(data?.list);
+
   return (
-    <>
-      {data.list.map((article) => (
-        <NormalArticleCard
-          key={article.id}
-          nickname={article.writer.nickname}
-          title={article.title}
-          likeCount={article.likeCount}
-          createdAt={article.createdAt}
-          articleId={article.id.toString()}
-        />
-      ))}
-    </>
+    <div className='flex flex-col gap-6'>
+      {data &&
+        !isLoading &&
+        data.list.map((article) => (
+          <NormalArticleCard
+            key={article.id}
+            nickname={article.user.nickname}
+            title={article.title}
+            likeCount={article.likeCount}
+            createdAt={article.createdAt}
+            articleId={article.id.toString()}
+          />
+        ))}
+    </div>
   );
 }
