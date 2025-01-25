@@ -10,9 +10,9 @@ export default function ArticleClient({ id }: { id: string }) {
     article && (
       <>
         <ArticleHeader
-          ownerId={article.writer.id}
+          ownerId={article.user.id}
           id={article.id.toString()}
-          nickname={article.writer.nickname}
+          nickname={article.user.nickname}
           title={article.title}
           createdAt={article.createdAt}
           likeCount={article.likeCount}
