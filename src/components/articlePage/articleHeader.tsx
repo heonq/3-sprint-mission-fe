@@ -39,7 +39,7 @@ export default function ArticleHeader({
         <h2 className='font-bold text-xl'>{title}</h2>
         <ActionMenu
           id={id}
-          onEditButtonClick={() => onEditButtonClick()}
+          onEditButtonClick={onEditButtonClick}
           onDeleteButtonClick={() =>
             setConfirmModalState({
               isOpen: true,
