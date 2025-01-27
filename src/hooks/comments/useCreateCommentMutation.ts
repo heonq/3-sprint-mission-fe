@@ -30,6 +30,10 @@ export const useCreateCommentMutation = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', variant, id] });
     },
-    onError: () => setMessage('로그인이 필요한 기능입니다.'),
+    onError: (error) => {
+      if (error.status === 401)
+        return setMessage('로그인이 필요한 기능입니다.');
+      setMessage(error.message);
+    },
   });
 };
