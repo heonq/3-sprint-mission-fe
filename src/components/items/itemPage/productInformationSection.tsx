@@ -14,6 +14,8 @@ import { useSetAtom } from 'jotai';
 import { confirmModalAtom } from '@/lib/store/modalAtoms';
 import { useMessageModal } from '@/hooks/modals/useMessageModal';
 import ProductInformationSkeleton from './productInformationSkeleton';
+import { useSetProductFavoriteMutation } from '@/hooks/products/useSetProductFavoriteMutation';
+import { useDeleteProductFavoriteMutation } from '@/hooks/products/useDeleteProductFavoriteMutation';
 
 export default function ProductInformationSection({ id }: { id: string }) {
   const { data: product, isLoading } = useProductQuery({
@@ -21,11 +23,8 @@ export default function ProductInformationSection({ id }: { id: string }) {
   });
   const router = useRouter();
   const { data: me } = useMe();
-
   const setConfirmModalAtom = useSetAtom(confirmModalAtom);
-
   const { setMessage } = useMessageModal();
-
   const { mutate } = useDeleteProductMutation();
 
   const onEditFn = () => {
@@ -41,6 +40,9 @@ export default function ProductInformationSection({ id }: { id: string }) {
       onConfirmFunction: () => product && mutate(product.id.toString()),
     });
   };
+
+  const { mutate: setFavorite } = useSetProductFavoriteMutation();
+  const { mutate: deleteFavorite } = useDeleteProductFavoriteMutation();
 
   if (isLoading) return <ProductInformationSkeleton />;
 
@@ -89,10 +91,11 @@ export default function ProductInformationSection({ id }: { id: string }) {
                 iconSize={40}
               />
               <LikeButton
-                variant='product'
                 count={product.favoriteCount}
                 liked={product.isFavorite}
-                id={product.id.toString()}
+                onClick={() =>
+                  product.isFavorite ? deleteFavorite(id) : setFavorite(id)
+                }
               />
             </div>
           </div>

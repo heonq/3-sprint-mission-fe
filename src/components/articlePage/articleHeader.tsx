@@ -11,6 +11,8 @@ import { useSetAtom } from 'jotai';
 import { confirmModalAtom } from '@/lib/store/modalAtoms';
 import { useMe } from '@/hooks/useMe';
 import { useMessageModal } from '@/hooks/modals/useMessageModal';
+import { useSetArticleFavoriteMutation } from '@/hooks/articles/useSetArticleFavoriteMutation';
+import { useDeleteArticleFavoriteMutation } from '@/hooks/articles/useDeleteArticleFavoriteMutation';
 
 export default function ArticleHeader({
   id,
@@ -32,6 +34,9 @@ export default function ArticleHeader({
       return setMessage('본인의 게시물만 수정할 수 있습니다.');
     router.push(`/community/${id}/edit`);
   };
+
+  const { mutate: setLikeMutation } = useSetArticleFavoriteMutation();
+  const { mutate: deleteLikeMutation } = useDeleteArticleFavoriteMutation();
 
   return (
     <div className='flex flex-col mb-4 md:mb-4 xl:mb-6 w-full'>
@@ -62,10 +67,11 @@ export default function ArticleHeader({
           |
         </span>
         <LikeButton
-          variant='article'
-          id={id}
           count={likeCount}
           liked={isLiked}
+          onClick={() =>
+            isLiked ? deleteLikeMutation(id) : setLikeMutation(id)
+          }
         />
       </div>
     </div>
