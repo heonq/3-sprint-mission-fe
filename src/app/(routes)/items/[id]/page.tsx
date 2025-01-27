@@ -19,7 +19,7 @@ export default function ProductPage({ params }: ParamsProps) {
           id={params.id}
           variant='product'
         />
-        <ReturnButton variant='product' />
+        <ReturnButton destination='/items' />
       </div>
     </>
   );

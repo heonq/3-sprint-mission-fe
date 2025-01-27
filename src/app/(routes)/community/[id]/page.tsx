@@ -13,7 +13,7 @@ export default function Page({ params }: ParamsProps) {
         id={params.id}
         variant='article'
       />
-      <ReturnButton variant='article' />
+      <ReturnButton destination='/community' />
     </article>
   );
 }
