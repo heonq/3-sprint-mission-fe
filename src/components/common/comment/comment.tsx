@@ -3,12 +3,11 @@
 import { CommentProps } from './types';
 import Profile from '../profile/profile';
 import ActionMenu from '../../community/actionMenu/actionMenu';
-import { useDeleteCommentMutation } from '@/hooks/comments/useDeleteCommentMutation';
-import { useEditCommentMutation } from '@/hooks/comments/useEditCommentMutation';
 import { useEditCommentClient } from '@/hooks/comments/useEditCommentClient';
 import EditCommentButtons from './editCommentButtons';
 import { useSetAtom } from 'jotai';
 import { confirmModalAtom } from '@/lib/store/modalAtoms';
+import { useCommentMutation } from '@/hooks/comments/useCommentMutation';
 
 export default function Comment({
   id,
@@ -24,7 +23,7 @@ export default function Comment({
     setConfirmModalAtom({
       isOpen: true,
       message: '정말로 댓글을 삭제하시겠어요?',
-      onConfirmFunction: () => deleteCommentMutation.mutate({ id }),
+      onConfirmFunction: () => deleteMutation.mutate({ id }),
     });
 
   const {
@@ -35,12 +34,7 @@ export default function Comment({
     onEditButtonClick,
   } = useEditCommentClient({ content, id });
 
-  const deleteCommentMutation = useDeleteCommentMutation({
-    pageId,
-    variant,
-  });
-
-  const editCommentMutation = useEditCommentMutation({
+  const { deleteMutation, editMutation } = useCommentMutation({
     pageId,
     variant,
   });
@@ -78,9 +72,7 @@ export default function Comment({
           {isEditing && (
             <EditCommentButtons
               onCancel={() => setEditingCommentId(null)}
-              onSubmit={() =>
-                editCommentMutation.mutate({ id, content: comment })
-              }
+              onSubmit={() => editMutation.mutate({ id, content: comment })}
             />
           )}
         </div>
