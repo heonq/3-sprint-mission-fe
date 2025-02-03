@@ -5,9 +5,8 @@ import Profile from '../profile/profile';
 import ActionMenu from '../../community/actionMenu/actionMenu';
 import { useEditCommentClient } from '@/hooks/comments/useEditCommentClient';
 import EditCommentButtons from './editCommentButtons';
-import { useSetAtom } from 'jotai';
-import { confirmModalAtom } from '@/lib/store/modalAtoms';
 import { useCommentMutation } from '@/hooks/comments/useCommentMutation';
+import { useModal } from '@/hooks/modals/useModal';
 
 export default function Comment({
   id,
@@ -18,14 +17,12 @@ export default function Comment({
   content,
   variant,
 }: CommentProps) {
-  const setConfirmModalAtom = useSetAtom(confirmModalAtom);
-  const onDeleteButtonClick = () =>
-    setConfirmModalAtom({
-      isOpen: true,
-      message: '정말로 댓글을 삭제하시겠어요?',
-      onConfirmFunction: () => deleteMutation.mutate({ id }),
-    });
-
+  const { openConfirmModal } = useModal();
+  const onDeleteButtonClick = () => {
+    openConfirmModal('정말로 댓글을 삭제하시겠어요?', () =>
+      deleteMutation.mutate({ id }),
+    );
+  };
   const {
     isEditing,
     comment,
