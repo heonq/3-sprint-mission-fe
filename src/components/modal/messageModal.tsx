@@ -5,7 +5,7 @@ import CommonBtn from '../common/commonBtn/commonBtn';
 import cn from '@/lib/cn';
 
 export default function MessageModal() {
-  const { message, closeModal } = useModal();
+  const { message, closeModal, onButtonClick } = useModal();
 
   return (
     <div className='fixed inset-0 bg-black/70 z-10'>
@@ -23,7 +23,10 @@ export default function MessageModal() {
           </div>
           <CommonBtn
             className='rounded-lg w-[120px] md:w-[165px] xl:w-[165px] h-[48px]'
-            onClick={closeModal}
+            onClick={() => {
+              closeModal();
+              onButtonClick && onButtonClick();
+            }}
           >
             확인
           </CommonBtn>

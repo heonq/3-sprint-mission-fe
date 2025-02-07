@@ -5,9 +5,10 @@ export const useModal = () => {
   const [{ isOpen, modalType, message, onButtonClick }, setModalState] =
     useAtom(modalAtom);
 
-  const openMessageModal = (message: string) => {
+  const openMessageModal = (message: string, onButtonClick?: () => void) => {
     setModalState((value) => ({
       ...value,
+      onButtonClick: onButtonClick ?? null,
       modalType: 'message',
       isOpen: true,
       message,
