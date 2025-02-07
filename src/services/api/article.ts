@@ -93,7 +93,7 @@ export const getArticleComments = async (
       `/articles/${articleId}/comments`,
       {
         params: {
-          limit,
+          take: limit,
         },
       },
     );
