@@ -9,18 +9,14 @@ export const useAuthMutation = <T extends object>(
 ) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { openConfirmModal, openMessageModal } = useModal();
+  const { openMessageModal } = useModal();
 
   return useMutation<SignInResponse, AxiosError<{ message: string }>, T>({
     mutationFn: authFn,
     onSuccess: (response, variable) => {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
-      }
       queryClient.setQueriesData({ queryKey: ['me'] }, response.user);
       if ('passwordConfirmation' in variable)
-        return openConfirmModal('가입 완료되었습니다', () =>
+        return openMessageModal('가입 완료되었습니다', () =>
           router.push('/items'),
         );
       router.push('/items');
