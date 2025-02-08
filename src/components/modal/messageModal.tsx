@@ -25,7 +25,7 @@ export default function MessageModal() {
             className='rounded-lg w-[120px] md:w-[165px] xl:w-[165px] h-[48px]'
             onClick={() => {
               closeModal();
-              onButtonClick && onButtonClick();
+              if (onButtonClick) onButtonClick();
             }}
           >
             확인
