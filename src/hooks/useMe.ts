@@ -5,14 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 export const useMe = () => {
   return useQuery<User>({
     queryKey: ['me'],
-    queryFn: async () => {
-      if (typeof window !== 'undefined') {
-        const accessKey = localStorage.getItem('accessToken');
-        if (!accessKey) return null;
-        const userData = await getMe();
-        return userData;
-      }
-      return null;
-    },
+    queryFn: getMe,
   });
 };
