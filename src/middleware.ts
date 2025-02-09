@@ -42,22 +42,6 @@ const redirectToLogin = (request: NextRequest) => {
 };
 
 const checkLoggedInMiddleware = async (request: NextRequest) => {
-  const cookieHeader = request.headers.get('cookie');
-
-  const parseCookie = (cookie: string | null) => {
-    if (!cookie) return {};
-    return cookie.split(';').reduce(
-      (acc, curr) => {
-        const [key, value] = curr.trim().split('=');
-        return { ...acc, [key]: value };
-      },
-      {} as Record<string, string>,
-    );
-  };
-
-  const cookies = parseCookie(cookieHeader);
-  console.log('Parsed Cookies:', cookies);
-
   const accessToken = request.cookies.get('accessToken')?.value;
   const refreshToken = request.cookies.get('refreshToken')?.value;
 
@@ -77,16 +61,18 @@ const checkLoggedInMiddleware = async (request: NextRequest) => {
   }
 
   if (!refreshToken) {
-    const loginUrl = new URL('/sign-in', request.url);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.next();
+    // const loginUrl = new URL('/sign-in', request.url);
+    // return NextResponse.redirect(loginUrl);
   }
 
   if (!accessToken) {
-    try {
-      return await refreshAccessToken(refreshToken);
-    } catch {
-      return redirectToLogin(request);
-    }
+    return NextResponse.next();
+    // try {
+    //   return await refreshAccessToken(refreshToken);
+    // } catch {
+    //   return redirectToLogin(request);
+    // }
   }
 
   try {
