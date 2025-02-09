@@ -42,8 +42,22 @@ const redirectToLogin = (request: NextRequest) => {
 };
 
 const checkLoggedInMiddleware = async (request: NextRequest) => {
-  const cookie = request.headers.get('cookie');
-  console.log('cookie', cookie);
+  const cookieHeader = request.headers.get('cookie');
+
+  const parseCookie = (cookie: string | null) => {
+    if (!cookie) return {};
+    return cookie.split(';').reduce(
+      (acc, curr) => {
+        const [key, value] = curr.trim().split('=');
+        return { ...acc, [key]: value };
+      },
+      {} as Record<string, string>,
+    );
+  };
+
+  const cookies = parseCookie(cookieHeader);
+  console.log('Parsed Cookies:', cookies);
+
   const accessToken = request.cookies.get('accessToken')?.value;
   const refreshToken = request.cookies.get('refreshToken')?.value;
 
