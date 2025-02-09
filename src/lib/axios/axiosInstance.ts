@@ -16,7 +16,13 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await axiosInstance.post('auth/refresh-token');
+        await axiosInstance.post(
+          'auth/refresh-token',
+          {},
+          {
+            withCredentials: true,
+          },
+        );
         return axiosInstance(originalRequest);
       } catch (error) {
         return Promise.reject(error);
