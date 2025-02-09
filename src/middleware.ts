@@ -42,6 +42,8 @@ const redirectToLogin = (request: NextRequest) => {
 };
 
 const checkLoggedInMiddleware = async (request: NextRequest) => {
+  console.log('Middleware - Cookies', request.cookies);
+  console.log('Middleware - Path:', request.nextUrl.pathname);
   const accessToken = request.cookies.get('accessToken')?.value;
   const refreshToken = request.cookies.get('refreshToken')?.value;
   const isPublicPath = PUBLIC_PATHS.some(
