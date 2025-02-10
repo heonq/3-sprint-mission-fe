@@ -1,8 +1,13 @@
 import { getMe, refreshToken } from '@/services/api/auth';
 import { User } from '@/services/api/types/auth.types';
 import { useQuery } from '@tanstack/react-query';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const useMe = () => {
+  const pathname = usePathname();
+  const allowedPaths = ['/', '/items', '/community'];
+  const router = useRouter();
+
   return useQuery<User>({
     queryKey: ['me'],
     queryFn: async () => {
@@ -12,8 +17,12 @@ export const useMe = () => {
           await refreshToken();
           const userData = await getMe();
           return userData;
-        } catch {}
+        } catch {
+          if (allowedPaths.includes(pathname)) return;
+          return router.push('/sign-in');
+        }
       return userData;
     },
+    staleTime: 0,
   });
 };
