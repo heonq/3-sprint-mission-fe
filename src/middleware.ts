@@ -147,32 +147,32 @@ const alreadyLoggedInMiddleware = async (request: NextRequest) => {
   }
 };
 
-const parseCookies = (cookieHeader: string | null) => {
-  if (!cookieHeader) return {};
+// const parseCookies = (cookieHeader: string | null) => {
+//   if (!cookieHeader) return {};
 
-  return cookieHeader.split(';').reduce(
-    (cookies, cookie) => {
-      const [name, value] = cookie.trim().split('=');
-      return { ...cookies, [name]: value };
-    },
-    {} as Record<string, string>,
-  );
-};
+//   return cookieHeader.split(';').reduce(
+//     (cookies, cookie) => {
+//       const [name, value] = cookie.trim().split('=');
+//       return { ...cookies, [name]: value };
+//     },
+//     {} as Record<string, string>,
+//   );
+// };
 
-const testMiddleware = async (request: NextRequest) => {
-  const cookieHeader = request.headers.get('cookie');
-  const cookies = parseCookies(cookieHeader);
-  console.log(cookies);
+// const testMiddleware = async (request: NextRequest) => {
+//   const cookieHeader = request.headers.get('cookie');
+//   const cookies = parseCookies(cookieHeader);
+//   console.log(cookies);
 
-  return NextResponse.next();
-};
+//   return NextResponse.next();
+// };
 
 export default async function middleware(request: NextRequest) {
   // const checkLoggedInResult = await checkLoggedInMiddleware(request);
   // if (checkLoggedInResult.status !== 200) {
   //   return checkLoggedInResult;
   // }
-  await testMiddleware(request);
+  // await testMiddleware(request);
 
   return await alreadyLoggedInMiddleware(request);
 }

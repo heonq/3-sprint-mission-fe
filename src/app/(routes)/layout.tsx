@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
 const refreshToken = async () => {
   const cookieStore = cookies();
   const refreshToken = cookieStore.get('refreshToken');
-  console.log(refreshToken);
+  console.log('refresh', refreshToken);
 
   if (!refreshToken) window.location.href = '/sign-in';
 
@@ -40,6 +40,7 @@ const refreshToken = async () => {
 const getProfile = async () => {
   const cookieStore = cookies();
   const accessToken = cookieStore.get('accessToken');
+  console.log('getProfile', accessToken);
 
   if (!accessToken) {
     await refreshToken();
