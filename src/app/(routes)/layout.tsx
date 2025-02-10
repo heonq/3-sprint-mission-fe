@@ -47,7 +47,7 @@ const getProfile = async () => {
   });
   const result = await response.json();
 
-  console.log(result);
+  console.log('result', result);
 
   return result;
 };
