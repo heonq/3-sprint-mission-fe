@@ -23,6 +23,6 @@ export const useMe = () => {
         }
       return userData;
     },
-    staleTime: 0,
+    staleTime: 1000 * 60 * 3,
   });
 };
