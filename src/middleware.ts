@@ -149,6 +149,7 @@ const alreadyLoggedInMiddleware = async (request: NextRequest) => {
 
 const testMiddleware = async (request: NextRequest) => {
   const cookie = cookies.toString();
+  console.log(request);
   console.log(cookie);
 
   return NextResponse.next();
