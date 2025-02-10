@@ -7,7 +7,44 @@ import {
 } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 
+const refreshToken = async () => {
+  const cookieStore = cookies();
+  const refreshToken = cookieStore.get('refreshToken');
+  console.log(refreshToken);
+
+  if (!refreshToken) window.location.href = '/sign-in';
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
+    {
+      method: 'POST',
+      headers: {
+        Cookie: `refreshToken=${refreshToken}`,
+      },
+      credentials: 'include',
+    },
+  );
+
+  console.log('refresh success');
+
+  if (!response.ok) window.location.href = '/sign-in';
+
+  const setCookieHeader = response.headers.get('set-cookie');
+  if (setCookieHeader) {
+    cookies().set('set-cookie', setCookieHeader);
+  }
+
+  return response;
+};
+
 const getProfile = async () => {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get('accessToken');
+
+  if (!accessToken) {
+    await refreshToken();
+  }
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
     credentials: 'include',
     headers: {
@@ -15,8 +52,9 @@ const getProfile = async () => {
       Cookie: cookies().toString(),
     },
   });
+  const result = await response.json();
 
-  return response.json();
+  return result;
 };
 
 export default async function Layout({
