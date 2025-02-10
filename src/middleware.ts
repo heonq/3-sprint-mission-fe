@@ -147,10 +147,22 @@ const alreadyLoggedInMiddleware = async (request: NextRequest) => {
   }
 };
 
+const parseCookies = (cookieHeader: string | null) => {
+  if (!cookieHeader) return {};
+
+  return cookieHeader.split(';').reduce(
+    (cookies, cookie) => {
+      const [name, value] = cookie.trim().split('=');
+      return { ...cookies, [name]: value };
+    },
+    {} as Record<string, string>,
+  );
+};
+
 const testMiddleware = async (request: NextRequest) => {
-  const cookie = cookies.toString();
-  console.log(request);
-  console.log(cookie);
+  const cookieHeader = request.headers.get('cookie');
+  const cookies = parseCookies(cookieHeader);
+  console.log(cookies);
 
   return NextResponse.next();
 };
