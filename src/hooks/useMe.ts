@@ -16,13 +16,14 @@ export const useMe = () => {
         try {
           await refreshToken();
           const userData = await getMe();
+          console.log(userData);
           return userData;
         } catch {
           if (allowedPaths.includes(pathname)) return;
           return router.push('/sign-in');
         }
+      console.log(userData);
       return userData;
     },
-    staleTime: 1000 * 60 * 3,
   });
 };
