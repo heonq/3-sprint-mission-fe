@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
+import { cookies } from 'next/headers';
 // import { JWTExpired } from 'jose/errors';
 // import { cookies } from 'next/headers';
 
@@ -147,9 +148,8 @@ const alreadyLoggedInMiddleware = async (request: NextRequest) => {
 };
 
 const testMiddleware = async (request: NextRequest) => {
-  const accessToken = request.cookies.get('accessToken');
-  const refreshToken = request.cookies.get('refreshToken');
-  console.log(accessToken, refreshToken);
+  const cookie = cookies.toString();
+  console.log(cookie);
 
   return NextResponse.next();
 };
