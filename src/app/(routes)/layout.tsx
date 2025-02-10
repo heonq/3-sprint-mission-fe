@@ -5,18 +5,27 @@ import {
   dehydrate,
   HydrationBoundary,
 } from '@tanstack/react-query';
-import { cookies, headers } from 'next/headers';
+// import { cookies, headers } from 'next/headers';
 
 const getProfile = async () => {
-  const headersList = headers();
-  console.log('headers list', headersList.get('cookie'));
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      Cookie: cookies().toString(),
+  // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+  //   credentials: 'include',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     Cookie: cookies().toString(),
+  //   },
+  // });
+  // const result = await response.json();
+
+  // console.log('result', result);
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/getProfile`,
+    {
+      credentials: 'include',
     },
-  });
+  );
+
   const result = await response.json();
 
   console.log('result', result);
