@@ -11,7 +11,7 @@ import {
 const getProducts = async (searchParams: GetProductListParams) => {
   const filteredParams = Object.fromEntries(
     Object.entries(searchParams)
-      .filter(([_, value]) => value !== undefined)
+      .filter(([key, value]) => key && value !== undefined)
       .map(([key, value]) => {
         if (key === 'page' || key === 'pageSize') {
           return [key, Number(value)];
