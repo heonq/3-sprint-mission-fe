@@ -28,7 +28,7 @@ export default function BestProductListClient({
         page: 1,
         pageSize: 4,
         orderBy: 'favorite',
-        keyword: '',
+        word: '',
       }),
     initialData,
   });

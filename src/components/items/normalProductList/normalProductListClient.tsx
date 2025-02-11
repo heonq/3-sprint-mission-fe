@@ -31,13 +31,13 @@ export default function NormalProductListClient({
       searchParams.page,
       searchParams.pageSize,
       searchParams.orderBy,
-      searchParams.keyword,
+      searchParams.word,
     ],
     queryFn: () =>
       getProductList({
         page: Number(searchParams.page) || 1,
         pageSize: searchParams.pageSize,
-        keyword: searchParams.keyword,
+        word: searchParams.word,
         orderBy: searchParams.orderBy || 'recent',
       }),
     enabled: !!screenWidth,
