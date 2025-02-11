@@ -8,29 +8,16 @@ import {
 // import { cookies, headers } from 'next/headers';
 
 const getProfile = async () => {
-  // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-  //   credentials: 'include',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     Cookie: cookies().toString(),
-  //   },
-  // });
-  // const result = await response.json();
-
-  // console.log('result', result);
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/getProfile`,
-    {
-      credentials: 'include',
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookies().toString(),
     },
-  );
-
+  });
   const result = await response.json();
 
   console.log('result', result);
-
-  return result;
 };
 
 export default async function Layout({
