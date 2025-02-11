@@ -2,6 +2,7 @@ import BestProductListSection from '@/components/items/bestProductList/bestProdu
 import NormalProductListClient from '@/components/items/normalProductList/normalProductListClient';
 import ProductListHeader from '@/components/items/productListHeader/productListHeader';
 import { GetProductListParams } from '@/services/api/types/product.types';
+import { createSearchParams } from '@/utils/createSearchParams';
 import {
   dehydrate,
   HydrationBoundary,
@@ -9,20 +10,7 @@ import {
 } from '@tanstack/react-query';
 
 const getProducts = async (searchParams: GetProductListParams) => {
-  const filteredParams = Object.fromEntries(
-    Object.entries(searchParams)
-      .filter(([key, value]) => key && value !== undefined)
-      .map(([key, value]) => {
-        if (key === 'page' || key === 'pageSize') {
-          return [key, Number(value)];
-        }
-        return [key, value];
-      }),
-  );
-  const params = new URLSearchParams();
-  Object.entries(filteredParams).forEach(([key, value]) => {
-    params.append(key, String(value));
-  });
+  const params = createSearchParams(searchParams);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/products?${params}`,
   );
@@ -38,14 +26,8 @@ export default async function Page({
 }) {
   const queryClient = new QueryClient();
   queryClient.prefetchQuery({
-    queryKey: [
-      'products',
-      searchParams.page,
-      searchParams.pageSize,
-      searchParams.orderBy,
-      searchParams.keyword,
-    ],
-    queryFn: () => getProducts(searchParams),
+    queryKey: ['products', ...Object.values(searchParams)],
+    queryFn: async () => await getProducts(searchParams),
   });
 
   return (
