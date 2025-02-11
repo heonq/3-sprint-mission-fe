@@ -32,12 +32,11 @@ export default function NormalProductListClient({
       searchParams.pageSize,
       searchParams.orderBy,
       searchParams.keyword,
-      productsPerPage,
     ],
     queryFn: () =>
       getProductList({
         page: Number(searchParams.page) || 1,
-        pageSize: productsPerPage,
+        pageSize: searchParams.pageSize,
         keyword: searchParams.keyword,
         orderBy: searchParams.orderBy || 'recent',
       }),
