@@ -7,6 +7,7 @@ import Product from '../product/product';
 import { MEDIA_QUERY } from '@/constants/mediaQuery';
 import { useAtom } from 'jotai';
 import { screenWidthAtom } from '@/lib/store/atoms';
+import ProductSkeleton from '../product/productSkeleton';
 
 const SLICE_VALUE = {
   [MEDIA_QUERY.value.large]: 4,
@@ -20,29 +21,37 @@ export default function BestProductListClient({
   const [screenWidth] = useAtom(screenWidthAtom);
   const sliceValue = SLICE_VALUE[screenWidth || MEDIA_QUERY.value.large];
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['bestProducts'],
     queryFn: () =>
       getProductList({
-        skip: 0,
-        take: 4,
-        orderBy: 'recent',
+        page: 1,
+        pageSize: 4,
+        orderBy: 'favorite',
         word: '',
       }),
     initialData,
   });
 
+  if (isLoading)
+    return Array.from({ length: sliceValue }, () => 0).map((el, index) => (
+      <ProductSkeleton
+        size='big'
+        key={el + index}
+      />
+    ));
+
   return (
     <>
-      {data.data.slice(0, sliceValue).map((product) => (
+      {data.list.slice(0, sliceValue).map((product) => (
         <Product
           key={product.id}
           id={product.id}
           size='big'
           title={product.name}
           price={product.price}
-          image='mockImage'
-          likes={99}
+          images={product.images}
+          likes={product.favoriteCount}
         />
       ))}
     </>

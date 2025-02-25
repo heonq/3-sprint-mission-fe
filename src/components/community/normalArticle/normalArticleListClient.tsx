@@ -1,44 +1,38 @@
 'use client';
 
-import { getArticleList } from '@/services/api/article';
-import {
-  GetArticleListParams,
-  GetArticleListResponse,
-} from '@/services/api/types/article';
-import { useQuery } from '@tanstack/react-query';
 import NormalArticleCard from './normalArticleCard';
+import { useNormalArticleListQuery } from '@/hooks/articles/useNormalArticleListQuery';
+import { NormalArticleListProps } from '@/lib/types/props.types';
+import NormalArticleCardSkeleton from './normalArticleSkeleton';
 
 export default function NormalArticleListClient({
   searchParams,
-  initialData,
-}: {
-  searchParams: GetArticleListParams;
-  initialData: GetArticleListResponse;
-}) {
-  const { data } = useQuery({
-    queryKey: ['normalArticles', searchParams.word],
-    queryFn: () =>
-      getArticleList({
-        skip: Number(searchParams.skip) || 0,
-        take: Number(searchParams.take) || 10,
-        word: searchParams.word,
-        orderBy: searchParams.orderBy || 'recent',
-      }),
-    initialData,
+}: NormalArticleListProps) {
+  const { data, isLoading } = useNormalArticleListQuery({
+    searchParams,
   });
 
+  if (isLoading)
+    return Array.from({ length: 10 }, () => 0).map((el, index) => (
+      <NormalArticleCardSkeleton key={el + index} />
+    ));
+
+  console.log(data?.list);
+
   return (
-    <>
-      {data.data.map((article) => (
-        <NormalArticleCard
-          key={article.id}
-          nickname='총명한 판다'
-          title={article.title}
-          likes={99}
-          createdAt={article.createdAt}
-          articleId={article.id}
-        />
-      ))}
-    </>
+    <div className='flex flex-col gap-6'>
+      {data &&
+        !isLoading &&
+        data.list.map((article) => (
+          <NormalArticleCard
+            key={article.id}
+            nickname={article.user.nickname}
+            title={article.title}
+            likeCount={article.likeCount}
+            createdAt={article.createdAt}
+            articleId={article.id.toString()}
+          />
+        ))}
+    </div>
   );
 }

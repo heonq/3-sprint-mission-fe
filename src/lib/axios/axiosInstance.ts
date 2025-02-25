@@ -5,18 +5,32 @@ const axiosInstance = axios.create({
   headers: {
     'Content-type': 'application/json',
   },
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        await axiosInstance.post(
+          'auth/refresh-token',
+          {},
+          {
+            withCredentials: true,
+          },
+        );
+        return axiosInstance(originalRequest);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    }
+
     if (error.response) {
       switch (error.response.status) {
-        case 401:
-          console.error('인증 에러');
-          break;
         case 404:
           console.error('리소스를 찾을 수 없습니다');
           break;

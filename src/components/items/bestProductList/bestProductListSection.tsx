@@ -3,9 +3,9 @@ import BestProductListClient from './bestProductListClient';
 
 export default async function BestProductListSection() {
   const productList = await getProductList({
-    skip: 0,
-    take: 4,
-    orderBy: 'recent',
+    page: 1,
+    pageSize: 4,
+    orderBy: 'favorite',
     word: '',
   });
 
