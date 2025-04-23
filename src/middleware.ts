@@ -131,6 +131,8 @@ export default async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get('accessToken')?.value;
   const refreshToken = request.cookies.get('refreshToken')?.value;
 
+  console.log('1', accessToken, refreshToken);
+
   // if (!accessToken && refreshToken) {
   //   try {
   //     const response = await fetch(
@@ -164,6 +166,7 @@ export default async function middleware(request: NextRequest) {
   // }
 
   if (!accessToken && !refreshToken) {
+    console.log('2', accessToken, refreshToken);
     const isAuthPath = AUTH_PATHS.some(
       (path) => request.nextUrl.pathname === path,
     );
