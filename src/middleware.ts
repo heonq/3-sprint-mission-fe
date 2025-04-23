@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-// import { jwtVerify } from 'jose';
+import { jwtVerify } from 'jose';
 // import { JWTExpired } from 'jose/errors';
 
 const PUBLIC_PATHS = ['/sign-in', '/sign-up', '/items', '/community', '/'];
 const AUTH_PATHS = ['/sign-in', '/sign-up'];
-// const ENCODED_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
+const ENCODED_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
+console.log('secret', ENCODED_SECRET);
 
 // const refreshAccessToken = async (refreshToken: string) => {
 //   const response = await fetch(
@@ -184,6 +185,15 @@ export default async function middleware(request: NextRequest) {
   }
 
   if (accessToken && refreshToken) {
+    try {
+      const verified = await jwtVerify(accessToken, ENCODED_SECRET);
+      console.log(verified);
+    } catch (err) {
+      console.log('err', err);
+      const loginUrl = new URL('/sign-in', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
     if (isAuthPath) {
       const loginUrl = new URL('/items', request.url);
       return NextResponse.redirect(loginUrl);
