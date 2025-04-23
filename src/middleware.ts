@@ -127,7 +127,8 @@ export default async function middleware(request: NextRequest) {
   // if (checkLoggedInResult.status !== 200) {
   //   return checkLoggedInResult;
   // }
-  console.log('secret', ENCODED_SECRET);
+  console.log('secret', process.env.JWT_SECRET);
+  console.log('encoded secret', ENCODED_SECRET);
 
   const isAuthPath = AUTH_PATHS.some(
     (path) => request.nextUrl.pathname === path,
