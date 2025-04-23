@@ -6,7 +6,6 @@ import { jwtVerify } from 'jose';
 const PUBLIC_PATHS = ['/sign-in', '/sign-up', '/items', '/community', '/'];
 const AUTH_PATHS = ['/sign-in', '/sign-up'];
 const ENCODED_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
-console.log('secret', ENCODED_SECRET);
 
 // const refreshAccessToken = async (refreshToken: string) => {
 //   const response = await fetch(
@@ -128,6 +127,7 @@ export default async function middleware(request: NextRequest) {
   // if (checkLoggedInResult.status !== 200) {
   //   return checkLoggedInResult;
   // }
+  console.log('secret', ENCODED_SECRET);
 
   const isAuthPath = AUTH_PATHS.some(
     (path) => request.nextUrl.pathname === path,
