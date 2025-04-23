@@ -131,42 +131,43 @@ export default async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get('accessToken')?.value;
   const refreshToken = request.cookies.get('refreshToken')?.value;
 
-  console.log('1', accessToken, refreshToken);
+  if (!accessToken && refreshToken) {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
+        {
+          method: 'POST',
+          headers: {
+            Cookie: `refreshToken=${refreshToken}`,
+          },
+          credentials: 'include',
+        },
+      );
 
-  // if (!accessToken && refreshToken) {
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
-  //       {
-  //         method: 'POST',
-  //         headers: {
-  //           Cookie: `refreshToken=${refreshToken}`,
-  //         },
-  //         credentials: 'include',
-  //       },
-  //     );
+      if (!response.ok) {
+        throw new Error('Token refresh failed');
+      }
 
-  //     if (!response.ok) {
-  //       throw new Error('Token refresh failed');
-  //     }
+      const refreshedCookies = response.headers.get('set-cookie');
+      if (!refreshedCookies) {
+        throw new Error('No cookies returned from refresh token endpoint');
+      }
 
-  //     const nextResponse = NextResponse.next();
-  //     const cookies = response.headers.getSetCookie();
+      const nextResponse = NextResponse.next();
 
-  //     cookies?.forEach((cookie) => {
-  //       nextResponse.headers.append('Set-Cookie', cookie);
-  //     });
+      refreshedCookies.split(',').forEach((cookie) => {
+        nextResponse.headers.append('Set-Cookie', cookie);
+      });
 
-  //     return nextResponse;
-  //   } catch (error) {
-  //     console.error('Error refreshing token:', error);
-  //     const loginUrl = new URL('/sign-in', request.url);
-  //     return NextResponse.redirect(loginUrl);
-  //   }
-  // }
+      return nextResponse;
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      const loginUrl = new URL('/sign-in', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
 
   if (!accessToken && !refreshToken) {
-    console.log('2', accessToken, refreshToken);
     const isAuthPath = AUTH_PATHS.some(
       (path) => request.nextUrl.pathname === path,
     );
