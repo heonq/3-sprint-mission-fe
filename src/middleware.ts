@@ -5,7 +5,6 @@ import { jwtVerify } from 'jose';
 
 const PUBLIC_PATHS = ['/sign-in', '/sign-up', '/items', '/community', '/'];
 const AUTH_PATHS = ['/sign-in', '/sign-up'];
-const ENCODED_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 // const refreshAccessToken = async (refreshToken: string) => {
 //   const response = await fetch(
@@ -123,10 +122,7 @@ const ENCODED_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 // };
 
 export default async function middleware(request: NextRequest) {
-  // const checkLoggedInResult = await checkLoggedInMiddleware(request);
-  // if (checkLoggedInResult.status !== 200) {
-  //   return checkLoggedInResult;
-  // }
+  const ENCODED_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
   console.log('secret', process.env.JWT_SECRET);
   console.log('encoded secret', ENCODED_SECRET);
 
