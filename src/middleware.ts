@@ -128,6 +128,13 @@ export default async function middleware(request: NextRequest) {
   //   return checkLoggedInResult;
   // }
 
+  const isAuthPath = AUTH_PATHS.some(
+    (path) => request.nextUrl.pathname === path,
+  );
+  const isPublicPath = PUBLIC_PATHS.some(
+    (path) => request.nextUrl.pathname === path,
+  );
+
   const accessToken = request.cookies.get('accessToken')?.value;
   const refreshToken = request.cookies.get('refreshToken')?.value;
 
@@ -168,19 +175,19 @@ export default async function middleware(request: NextRequest) {
   }
 
   if (!accessToken && !refreshToken) {
-    const isAuthPath = AUTH_PATHS.some(
-      (path) => request.nextUrl.pathname === path,
-    );
-    const isPublicPath = PUBLIC_PATHS.some(
-      (path) => request.nextUrl.pathname === path,
-    );
-
     if (isAuthPath || isPublicPath) {
       return NextResponse.next();
     }
 
     const loginUrl = new URL('/sign-in', request.url);
     if (!isPublicPath) return NextResponse.redirect(loginUrl);
+  }
+
+  if (accessToken && refreshToken) {
+    if (isAuthPath) {
+      const loginUrl = new URL('/items', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   // return alreadyLoggedInMiddleware(request);
